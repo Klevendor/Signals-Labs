@@ -1,0 +1,96 @@
+clear, close all
+% Task 1
+I1 = imread('eight.tif');
+I2 = imread('Images/I2.jpg');
+I3 = imread('Images/I3.png');
+
+% Task 2
+imshow(I1);
+figure;
+imshow(I2);
+figure;
+imshow(I3);
+figure;
+
+% Task 3
+% Білий шум по Гаусу
+J1 = imnoise(I1,'gaussian'); 
+% Імпульсна перешкода 
+J2 = imnoise(I2,'salt & pepper', 0.02); 
+J3 = imnoise(I3,'salt & pepper', 0.05); 
+
+% Task 4 
+imshow(J1);
+title("Зашумлене зображення Монети");
+figure;
+imshow(J2);
+title("Зашумлене зображення Кіт");
+figure;
+imshow(J3);
+title("Зашумлене зображення М'яч");
+figure;
+
+% Task 5,6 - фільтрація лінійними фільтрами та вікнами
+h1 = [1,1,1;1,2,1;1,1,1] / 10; % [1,1,1;1,1,1;1,1,1]/9
+J_f1 = imfilter(J1,h1);
+imshow(J_f1),
+title('Зображення  Монети на виході лінійного фільтра')
+figure;
+
+h2 = ones(3,3) / 9; % високочастотний фільтр не підходить в даному випадку - чорний екран 
+J_f2 = imfilter(J2,h2);
+imshow(J_f2),
+title('Зображення Кіт на виході лінійного фільтра')
+figure;
+
+h3 = ones(3,3) / 9; %[1,2,1;2,4,2;1,2,1] / 16; високочастотний фільтр не підходить в даному випадку - чорний екран (в результаті кожен px на який буде впливати ця маска стане чорним через малий шум ) 
+J_f3 = imfilter(J3,h3);
+imshow(J_f3),
+title('Зображення Кіт на виході лінійного фільтра');
+
+% Task 7 - ще більше зашумимо для різних перешкод
+J2 = imnoise(I2,'salt & pepper', 0.2); 
+J3 = imnoise(I3,'salt & pepper', 0.5); 
+
+imshow(J2);
+title("Дуже зашумлене зображення Кіт");
+figure;
+imshow(J3);
+title("Дуже зашумлене зображення М'яч");
+figure;
+
+h4 = [-1,-1,-1;-1,-9,-1;-1,-1,-1]; % високочастотний фільтр не підходить в даному випадку - чорний екран 
+J_f4 = imfilter(J2,h4);
+imshow(J_f4),
+title('Зображення (дуже шумне) Кіт на виході лінійного фільтра')
+figure;
+
+h5 = [1,2,1;2,4,2;1,2,1] / 16; % високочастотний фільтр не підходить в даному випадку - чорний екран (в результаті кожен px на який буде впливати ця маска стане чорним через малий шум ) 
+J_f5 = imfilter(J3,h5);
+imshow(J_f5),
+title('Зображення (дуже шумне) М_яч на виході лінійного фільтра');
+
+% Task 8
+J1_grey = imnoise(im2gray(I1),'gaussian'); 
+J2_grey = imnoise(im2gray(I2),'salt & pepper', 0.02); 
+J3_grey = imnoise(im2gray(I3),'salt & pepper', 0.05); 
+
+imshow(J1_grey);
+figure;
+imshow(J2_grey);
+figure;
+imshow(J3_grey);
+figure;
+
+K_gaus1 = wiener2(J1_grey,[5 5]);
+imshow(K_gaus1);
+
+K_gaus2 = wiener2(J2_grey,[5 5]);
+figure, imshow(K_gaus2);
+
+K_gaus3 = wiener2(J3_grey,[5 5]);
+figure, imshow(K_gaus3);
+
+% Task 9
+
+
